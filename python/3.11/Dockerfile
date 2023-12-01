@@ -3,7 +3,7 @@ FROM        --platform=$TARGETOS/$TARGETARCH python:3.11-slim
 LABEL       author="Michael Parker" maintainer="parker@pterodactyl.io"
 
 RUN         apt update \
-            && apt -y install git gcc g++ ca-certificates dnsutils curl wget unzip gnupg2 iproute2 ffmpeg procps tini \
+            && apt -y install git gcc g++ ca-certificates dnsutils curl wget unzip gnupg2 iproute2 selenium ffmpeg procps tini \
             && useradd -m -d /home/container container
 			
 RUN         CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE) \
