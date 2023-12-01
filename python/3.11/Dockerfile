@@ -5,8 +5,15 @@ LABEL       author="Michael Parker" maintainer="parker@pterodactyl.io"
 RUN         apt update \
             && apt -y install git gcc g++ ca-certificates dnsutils curl wget unzip gnupg2 iproute2 ffmpeg procps tini \
             && useradd -m -d /home/container container
-			
-RUN         mv chromedriver /usr/local/bin/chromedriver-selenium
+
+   
+RUN         apt-get update -y \
+		    && apt-get install -y chromium-driver \
+		    && apt-get clean \
+		    && rm -rf /var/lib/apt/lists/*
+
+
+RUN         mv /usr/lib/chromium-browser/chromedriver /usr/local/bin/chromedriver
 
 USER        container
 ENV         USER=container HOME=/home/container
