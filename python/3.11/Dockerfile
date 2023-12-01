@@ -6,17 +6,13 @@ RUN         apt update \
             && apt -y install git gcc g++ ca-certificates dnsutils curl wget unzip gnupg2 iproute2 ffmpeg procps tini \
             && useradd -m -d /home/container container
 			
-RUN         CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE) \
+RUN         apt-get update -y \
+		    && apt-get install -y wget unzip python3-pip \
+		    && CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE) \
 		    && wget -q "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" \
 		    && unzip "chromedriver_linux64.zip" -d /usr/local/bin \
 		    && rm "chromedriver_linux64.zip" \
-		    && apt-get update -y \
-		    && apt-get install -y python3-pip \
-		    && pip3 install selenium \
-		    && mv /usr/local/bin/chromedriver /usr/local/bin/chromedriver-selenium \
-		    && mv /usr/local/bin/chromedriver /usr/local/bin/selenium \
-		    && apt-get clean \
-		    && rm -rf /var/lib/apt/lists/*
+		    && pip3 install selenium
 	  
 ENV         CHROME_DRIVER_PATH /usr/local/bin/chromedriver
 
