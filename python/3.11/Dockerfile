@@ -6,8 +6,7 @@ RUN         apt update \
             && apt -y install git gcc g++ ca-certificates dnsutils curl wget unzip gnupg2 iproute2 ffmpeg procps tini \
             && useradd -m -d /home/container container
 			
-RUN         pip install selenium && \
-		    mv /usr/local/bin/chromedriver /usr/local/bin/chromedriver-selenium
+RUN         mv chromedriver /usr/local/bin/chromedriver-selenium
 
 USER        container
 ENV         USER=container HOME=/home/container
