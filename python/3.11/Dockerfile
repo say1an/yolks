@@ -9,7 +9,14 @@ RUN         apt update \
 RUN         CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE) \
 		    && wget -q "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" \
 		    && unzip "chromedriver_linux64.zip" -d /usr/local/bin \
-		    && rm "chromedriver_linux64.zip"
+		    && rm "chromedriver_linux64.zip" \
+		    && apt-get update -y \
+		    && apt-get install -y python3-pip \
+		    && pip3 install selenium \
+		    && mv /usr/local/bin/chromedriver /usr/local/bin/chromedriver-selenium \
+		    && mv /usr/local/bin/chromedriver /usr/local/bin/selenium \
+		    && apt-get clean \
+		    && rm -rf /var/lib/apt/lists/*
 	  
 ENV         CHROME_DRIVER_PATH /usr/local/bin/chromedriver
 
