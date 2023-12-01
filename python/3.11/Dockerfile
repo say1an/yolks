@@ -13,6 +13,9 @@ RUN         apt-get update -y \
 		    && rm -rf /var/lib/apt/lists/*
 
 
+RUN         mkdir -p /usr/local/bin
+
+
 RUN         mv /usr/lib/chromium-browser/chromedriver /usr/local/bin/chromedriver
 
 USER        container
