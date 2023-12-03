@@ -18,6 +18,8 @@ RUN         mkdir -p /usr/local/bin
 
 RUN         mv /usr/lib/chromium-browser/chromedriver /usr/local/bin/chromedriver
 
+COPY        chromedriver /usr/local/bin/chromedriver
+
 USER        container
 ENV         USER=container HOME=/home/container
 WORKDIR     /home/container
