@@ -17,7 +17,9 @@ ENV USER=container HOME=/home/container
 WORKDIR /home/container
 
 # Instalação do Selenium e dependências do Python
-RUN apk add --update --no-cache python3 py3-pip \
+RUN apk add --update --no-cache python3 \
+    && python3 -m ensurepip \
+    && pip3 install --upgrade pip \
     && pip3 install selenium
 
 # Copia o entrypoint.sh
