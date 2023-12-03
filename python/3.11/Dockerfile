@@ -5,10 +5,9 @@ LABEL       author="Matthew Penner" maintainer="matthew@pterodactyl.io"
 LABEL       org.opencontainers.image.source="https://github.com/pterodactyl/yolks"
 LABEL       org.opencontainers.image.licenses=MIT
 
-RUN         apk add --update --no-cache cmake make ca-certificates curl ffmpeg g++ gcc git openssl sqlite tar tzdata \
+RUN         apk add --update --no-cache cmake make ca-certificates curl wget xvfb unzip ffmpeg g++ gcc git openssl sqlite tar tzdata \
 	        && adduser -D -h /home/container container
 		 
-RUN         apt-get install -y wget xvfb unzip
 
 RUN         wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
 RUN         echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
