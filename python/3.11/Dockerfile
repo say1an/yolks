@@ -7,22 +7,14 @@ LABEL org.opencontainers.image.licenses=MIT
 
 # Instalação de dependências
 RUN apk add --update --no-cache \
-    cmake make ca-certificates curl ffmpeg g++ gcc git openssl sqlite tar tzdata \
-    && adduser -D -h /home/container container
+    ca-certificates curl chromium chromium-chromedriver \
+    ffmpeg tzdata
 
 # Configuração do usuário
+RUN adduser -D -h /home/container container
 USER container
 ENV USER=container HOME=/home/container
 WORKDIR /home/container
-
-# Copia o chromedriver para o local correto
-COPY chromedriver /usr/local/bin/chromedriver
-
-# Define as permissões corretas para o chromedriver
-RUN chmod +x /usr/local/bin/chromedriver
-
-# Instalação do Chrome
-RUN apk add --update --no-cache chromium chromium-chromedriver
 
 # Instalação do Selenium e dependências do Python
 RUN apk add --update --no-cache python3 py3-pip \
