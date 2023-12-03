@@ -8,8 +8,6 @@ LABEL       org.opencontainers.image.licenses=MIT
 RUN         apk add --update --no-cache cmake make ca-certificates curl ffmpeg g++ gcc git openssl sqlite tar tzdata \
 	        && adduser -D -h /home/container container
 
-RUN         pip install --trusted-host pypi.python.org -r requirements.txt
-
 RUN         apt-get update && apt-get install -y wget unzip && \
             wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
 			rm google-chrome-stable_current_amd64.deb && \
