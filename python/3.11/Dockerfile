@@ -1,21 +1,27 @@
-FROM        --platform=$TARGETOS/$TARGETARCH python:3.11-alpine
+FROM --platform=$TARGETOS/$TARGETARCH python:3.11-alpine
 
-LABEL       author="Matthew Penner" maintainer="matthew@pterodactyl.io"
+LABEL author="Matthew Penner" maintainer="matthew@pterodactyl.io"
 
-LABEL       org.opencontainers.image.source="https://github.com/pterodactyl/yolks"
-LABEL       org.opencontainers.image.licenses=MIT
+LABEL org.opencontainers.image.source="https://github.com/pterodactyl/yolks"
+LABEL org.opencontainers.image.licenses=MIT
 
-RUN         apk add --update --no-cache cmake make ca-certificates curl ffmpeg g++ gcc git openssl sqlite tar tzdata \
-	        && adduser -D -h /home/container container
+# Instalação de dependências
+RUN apk add --update --no-cache \
+    ca-certificates curl chromium chromium-chromedriver \
+    ffmpeg tzdata
 
-RUN         apt-get update && apt-get install -y wget unzip && \
-            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-			rm google-chrome-stable_current_amd64.deb && \
-            apt-get clean
+# Configuração do usuário
+RUN adduser -D -h /home/container container
+USER container
+ENV USER=container HOME=/home/container
+WORKDIR /home/container
 
-USER        container
-ENV         USER=container HOME=/home/container
-WORKDIR     /home/container
+# Instalação do Selenium e dependências do Python
+RUN apk add --update --no-cache python3 \
+    && python3 -m ensurepip \
+    && pip3 install --upgrade pip \
+    && pip3 install selenium
 
-COPY        ./../entrypoint.sh /entrypoint.sh
-CMD         [ "/bin/ash", "/entrypoint.sh" ]
+# Copia o entrypoint.sh
+COPY ./../entrypoint.sh /entrypoint.sh
+CMD ["/bin/ash", "/entrypoint.sh"]
