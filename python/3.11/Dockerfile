@@ -1,38 +1,16 @@
-FROM --platform=$TARGETOS/$TARGETARCH python:3.11-slim
+FROM        --platform=$TARGETOS/$TARGETARCH python:3.11-alpine
 
-LABEL author="Michael Parker" maintainer="parker@pterodactyl.io"
+LABEL       author="Matthew Penner" maintainer="matthew@pterodactyl.io"
 
-# Instale as dependências
-RUN apt-get update -y \
-    && apt-get install -y git gcc g++ ca-certificates dnsutils curl wget unzip gnupg2 iproute2 ffmpeg procps tini \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+LABEL       org.opencontainers.image.source="https://github.com/pterodactyl/yolks"
+LABEL       org.opencontainers.image.licenses=MIT
 
-# Adicione um usuário não privilegiado
-RUN useradd -m -d /home/container container
+RUN         apk add --update --no-cache cmake make ca-certificates curl ffmpeg g++ gcc git openssl sqlite tar tzdata \
+	&& adduser -D -h /home/container container
 
-# Crie o diretório para o chromedriver
-RUN mkdir -p /usr/local/bin
+USER        container
+ENV         USER=container HOME=/home/container
+WORKDIR     /home/container
 
-# Copie o chromedriver para o local correto
-COPY chromedriver /usr/local/bin/chromedriver
-
-# Defina as permissões corretas para o chromedriver
-RUN chmod +x /usr/local/bin/chromedriver
-
-# Mude para o usuário container
-USER container
-ENV USER=container HOME=/home/container
-WORKDIR /home/container
-
-# Configurações adicionais (se necessário)
-# ...
-
-# Copie os scripts ou arquivos necessários
-COPY --chown=container:container ./../entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-# Configuração final
-STOPSIGNAL SIGINT
-ENTRYPOINT ["/usr/bin/tini", "-g", "--"]
-CMD ["/entrypoint.sh"]
+COPY        ./../entrypoint.sh /entrypoint.sh
+CMD         [ "/bin/ash", "/entrypoint.sh" ]
