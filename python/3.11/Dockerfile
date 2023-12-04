@@ -8,6 +8,8 @@ LABEL       org.opencontainers.image.licenses=MIT
 RUN         apk add --update --no-cache cmake make ca-certificates curl ffmpeg g++ gcc git openssl sqlite tar tzdata \
 	&& adduser -D -h /home/container container
 
+RUN         apk add --update --no-cache chromium chromium-chromedriver
+
 USER        container
 ENV         USER=container HOME=/home/container
 WORKDIR     /home/container
